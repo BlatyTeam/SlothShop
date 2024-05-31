@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLOTH SHOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: #000;
+            position: relative;
+        }
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 110%;
+            height: 110%;
+            object-fit: cover;
+            z-index: -1;
+            transition: transform 0.1s;
+        }
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(51, 51, 51, 0.8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .header img {
+            height: 50px;
+            margin-right: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .product-wrapper {
+            background-color: rgba(51, 51, 51, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 120px;
+            width: 100%;
+            max-width: 1100px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            height: calc(100vh - 170px); /* Adjusted height to account for header and padding */
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .product {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            width: 120px; /* Adjusted width */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            flex: 1 1 calc(25% - 40px); /* Four items per row */
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+        .product h2 {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #000;
+        }
+        .product p {
+            font-size: 12px;
+            color: #333;
+        }
+        .product .price {
+            font-size: 14px;
+            color: #333;
+            margin: 10px 0;
+        }
+        .product button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .product button:hover {
+            background-color: #555;
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(51, 51, 51, 0.8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+        .cart {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            width: 250px;
+            background-color: rgba(51, 51, 51, 0.8);
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .cart h2 {
+            font-size: 18px;
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+        .cart ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .cart li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .cart .total {
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: right;
+        }
+        .cart button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .cart button:hover {
+            background-color: #555;
+        }
+        .cart .checkout {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .cart .checkout p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .cart .checkout a {
+            color: #fff;
+            text-decoration: underline;
+            margin-top: 5px;
+        }
+        @media (max-width: 768px) {
+            .product-wrapper {
+                margin-top: 140px; /* Adjusted margin for smaller screens */
+                height: calc(100vh - 190px); /* Adjusted height for smaller screens */
+            }
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .product {
+                flex: 1 1 100%;
+                max-width: 300px;
+            }
+            .cart {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="img/minecraftk.jpg" class="bg-image" alt="Tło">
+
+    <div class="header">
+        <img src="sloth.png" alt="Sloth Icon">
+        <h1>SLOTH SHOP</h1>
+    </div>
+
+    <div class="product-wrapper">
+        <div class="container">
+            <div class="product">
+                <img src="img/chat.png" alt="Skrypt 1">
+                <h2>Chat</h2>
+                <p>Skrypt dodaje komendy<br>/chat ON/OFF/CLEAR<br>Permisja "blatmc.chat"<br>Dostep do pisania na chacie permisja<br>"blatmc.chatpisanie".</p>
+                <p class="price">Cena: 5 PLN</p>
+                <button onclick="addToCart('Chat', 5)">Zamawiam!</button>
+            </div>
+            <div class="product">
+                <img src="img/report.png" alt="Skrypt 2">
+                <h2>Report</h2>
+                <p>Skrypt dodaje komendy<br>/zglos oraz /helpop<br>Permisja "blatmc.zglos", na otrzymanie wiadomosci. <br> <br> <br> </p>
+                <p class="price">Cena: 5 PLN</p>
+                <button onclick="addToCart('Report', 5)">Zamawiam!</button>
+            </div>
+            <div class="product">
+                <img src="img/kowadlo.png" alt="Skrypt 3">
+                <h2>Kowadlo</h2>
+                <p>Po kliknieciu w kowalo, te naprawia przedmiot jezeli posiadasz wymagany poziom xp, inaczej wyskoczy komunikat o bledzie. <br>  <br> </p>
+                <p class="price">Cena: 20 PLN</p>
+                <button onclick="addToCart('Kowadlo', 20)">Zamawiam!</button>
+            </div>
+            <div class="product">
+                <img src="img/example.png" alt="Skrypt 4">
+                <h2>Example</h2>
+                <p>Przykładowy skrypt do testowania rozmiaru produktu i układu. <br> <br> <br> <br> </p>
+                <p class="price">Cena: 10 PLN</p>
+                <button onclick="addToCart('Example', 10)">Zamawiam!</button>
+            </div>
+            <div class="product">
+                <img src="img/example.png" alt="Skrypt 5">
+                <h2>Example</h2>
+                <p>Przykładowy skrypt do testowania rozmiaru produktu i układu. <br> <br> <br> <br> </p>
+                <p class="price">Cena: 10 PLN</p>
+                <button onclick="addToCart('Example', 10)">Zamawiam!</button>
+            </div>
+            <div class="product">
+                <img src="img/example.png" alt="Skrypt 6">
+                <h2>Example</h2>
+                <p>Przykładowy skrypt do testowania rozmiaru produktu i układu. <br> <br> <br> <br> </p>
+                <p class="price">Cena: 10 PLN</p>
+                <button onclick="addToCart('Example', 10)">Zamawiam!</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart">
+        <h2>Koszyk</h2>
+        <ul id="cart-items"></ul>
+        <p class="total">Razem: <span id="total-price">0</span> PLN</p>
+        <button onclick="checkout()">Przejdź do płatności</button>
+        <div class="checkout" id="checkout-info" style="display: none;">
+            <p id="checkout-total"></p>
+            <a href="#" id="payment-link">Zapłać teraz</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Blat Studio. Zabraniamy tworzenia kopii, oraz sprzedawania naszych skryptow. | Kontakt: blaty.team@gmail.com</p>
+    </div>
+
+    <script>
+        let cart = [];
+        function addToCart(name, price) {
+            if (!cart.some(item => item.name === name)) {
+                cart.push({ name, price });
+                renderCart();
+            }
+        }
+
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+            cartItems.innerHTML = '';
+            let totalPrice = 0;
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - ${item.price} PLN`;
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Usuń';
+                removeButton.onclick = () => removeFromCart(item.name);
+                li.appendChild(removeButton);
+                cartItems.appendChild(li);
+                totalPrice += item.price;
+            });
+            totalPriceElement.textContent = totalPrice;
+        }
+
+        function checkout() {
+            const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('checkout-total').textContent = `Łączna kwota: ${totalPrice} PLN`;
+            document.getElementById('checkout-info').style.display = 'block';
+            document.getElementById('payment-link').href = `https://payment-link.com/?amount=${totalPrice}`;
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            const bgImage = document.querySelector('.bg-image');
+            const x = (e.clientX / window.innerWidth) * 50;
+            const y = (e.clientY / window.innerHeight) * 50;
+            bgImage.style.transform = `translate(-${x}px, -${y}px)`;
+        });
+    </script>
+
+</body>
+</html>
