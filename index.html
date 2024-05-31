@@ -9,16 +9,14 @@
         body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
             font-family: 'Fredoka One', cursive;
             color: #fff;
-            height: 100vh;
+            background: #000;
+            position: relative;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            background: #000;
-            position: relative;
         }
         .bg-image {
             position: fixed;
@@ -31,9 +29,6 @@
             transition: transform 0.1s;
         }
         .header {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             background-color: rgba(51, 51, 51, 0.8);
             color: #fff;
@@ -42,6 +37,8 @@
             padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             z-index: 1;
+            position: sticky;
+            top: 0;
         }
         .header img {
             height: 50px;
@@ -50,17 +47,23 @@
         .header h1 {
             margin: 0;
             font-size: 24px;
+            flex-grow: 1;
+        }
+        .header .cart-icon {
+            cursor: pointer;
+            position: relative;
+        }
+        .header .cart-icon img {
+            height: 30px;
         }
         .product-wrapper {
             background-color: rgba(51, 51, 51, 0.5);
             border-radius: 10px;
             padding: 20px;
-            margin-top: 120px;
+            margin-top: 20px;
             width: 100%;
             max-width: 1100px;
             box-sizing: border-box;
-            overflow-y: auto;
-            height: calc(100vh - 170px); /* Adjusted height to account for header and padding */
         }
         .container {
             display: flex;
@@ -119,22 +122,24 @@
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
             z-index: 1;
             width: 100%;
+            margin-top: auto;
         }
         .footer p {
             margin: 0;
             font-size: 14px;
         }
         .cart {
-            position: absolute;
-            top: 80px;
+            position: fixed;
+            top: 20px;
             right: 20px;
-            width: 250px;
-            background-color: rgba(51, 51, 51, 0.8);
+            width: 300px;
+            background-color: rgba(51, 51, 51, 0.9);
             color: #fff;
             padding: 15px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-            z-index: 1;
+            z-index: 2;
+            display: none;
         }
         .cart h2 {
             font-size: 18px;
@@ -185,10 +190,19 @@
             text-decoration: underline;
             margin-top: 5px;
         }
+        .cart .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
         @media (max-width: 768px) {
             .product-wrapper {
-                margin-top: 140px; /* Adjusted margin for smaller screens */
-                height: calc(100vh - 190px); /* Adjusted height for smaller screens */
+                margin-top: 20px; /* Adjusted margin for smaller screens */
             }
             .container {
                 flex-direction: column;
@@ -198,16 +212,21 @@
                 flex: 1 1 100%;
                 max-width: 300px;
             }
-            .cart {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-top: 20px;
-            }
-            .footer {
-                position: relative;
-                bottom: 0;
-            }
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #333;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+            border: 3px solid #333;
+        }
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
@@ -218,6 +237,9 @@
     <div class="header">
         <img src="sloth.png" alt="Sloth Icon">
         <h1>SLOTH SHOP</h1>
+        <div class="cart-icon" onclick="toggleCart()">
+            <img src="img/koszyk.png" alt="Cart Icon">
+        </div>
     </div>
 
     <div class="product-wrapper">
@@ -239,9 +261,9 @@
             <div class="product">
                 <img src="img/kowadlo.png" alt="Skrypt 3">
                 <h2>Kowadlo</h2>
-                <p>Po kliknieciu w kowalo, te naprawia przedmiot jezeli posiadasz wymagany poziom xp, inaczej wyskoczy komunikat o bledzie. <br>  <br> </p>
-                <p class="price">Cena: 20 PLN</p>
-                <button onclick="addToCart('Kowadlo', 20)">Zamawiam!</button>
+                <p>Po kliknieciu w kowadlo pojawi nam sie GUI 4x4 z ulepszaniem itemow. <br> <br> <br> <br> <br> </p>
+                <p class="price">Cena: 10 PLN</p>
+                <button onclick="addToCart('Kowadlo', 10)">Zamawiam!</button>
             </div>
             <div class="product">
                 <img src="img/example.png" alt="Skrypt 4">
@@ -267,7 +289,12 @@
         </div>
     </div>
 
-    <div class="cart">
+    <div class="footer">
+        <p>© 2024 Blat Studio. Zabraniamy tworzenia kopii, oraz sprzedawania naszych skryptow. | Kontakt: blaty.team@gmail.com</p>
+    </div>
+
+    <div class="cart" id="cart">
+        <button class="close-btn" onclick="toggleCart()">X</button>
         <h2>Koszyk</h2>
         <ul id="cart-items"></ul>
         <p class="total">Razem: <span id="total-price">0</span> PLN</p>
@@ -276,10 +303,6 @@
             <p id="checkout-total"></p>
             <a href="#" id="payment-link">Zapłać teraz</a>
         </div>
-    </div>
-
-    <div class="footer">
-        <p>© 2024 Blat Studio. Zabraniamy tworzenia kopii, oraz sprzedawania naszych skryptow. | Kontakt: blaty.team@gmail.com</p>
     </div>
 
     <script>
@@ -319,6 +342,11 @@
             document.getElementById('checkout-total').textContent = `Łączna kwota: ${totalPrice} PLN`;
             document.getElementById('checkout-info').style.display = 'block';
             document.getElementById('payment-link').href = `https://payment-link.com/?amount=${totalPrice}`;
+        }
+
+        function toggleCart() {
+            const cart = document.getElementById('cart');
+            cart.style.display = cart.style.display === 'none' || cart.style.display === '' ? 'block' : 'none';
         }
 
         document.addEventListener('mousemove', function(e) {
