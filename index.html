@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SLOTH SHOP</title>
+    <link rel="icon" href="sloth.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
     <style>
         body {
@@ -136,7 +137,7 @@
         .cart {
             position: fixed;
             top: 20px;
-            right: 20px;
+            right: -320px; /* Initially hidden off-screen */
             width: 300px;
             background-color: rgba(51, 51, 51, 0.9);
             color: #fff;
@@ -144,7 +145,10 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             z-index: 2;
-            display: none;
+            transition: right 0.3s ease-in-out; /* Smooth sliding animation */
+        }
+        .cart.open {
+            right: 20px; /* Slide into view */
         }
         .cart h2 {
             font-size: 18px;
@@ -222,12 +226,12 @@
                 padding: 10px; /* Adjusted padding for smaller screens */
             }
             .container {
-                flex-direction: column;
-                align-items: center;
+                flex-wrap: wrap;
+                justify-content: center;
             }
             .product {
-                flex: 1 1 100%;
-                max-width: 300px;
+                flex: 1 1 calc(33.33% - 20px); /* Three items per row */
+                max-width: 120px; /* Ensures proper width */
             }
         }
         /* Custom scrollbar */
@@ -265,42 +269,42 @@
                 <h2>Chat</h2>
                 <p>Skrypt dodaje komendy<br>/chat ON/OFF/CLEAR<br>Permisja "blatmc.chat"<br>Dostep do pisania na chacie to permisja<br>"blatmc.chatpisanie".</p>
                 <p class="price">Cena: 5 PLN</p>
-                <button onclick="addToCart('Chat', 5, 'img/chat.png')">Zamawiam!</button>
+                <button onclick="addToCart('Chat', 5, 'img/chat.png')">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/report.png" alt="Skrypt 2">
                 <h2>Report</h2>
-                <p>Skrypt dodaje komendy<br>/zglos oraz /helpop<br>Permisja "blatmc.zglos", oraz "blatmc.helpop".</p>
+                <p>Skrypt dodaje komendy<br>/zglos oraz /helpop<br>Permisja "blatmc.zglos". <br> <br> <br></p>
                 <p class="price">Cena: 5 PLN</p>
-                <button onclick="addToCart('Report', 5, 'img/report.png')">Zamawiam!</button>
+                <button onclick="addToCart('Report', 5, 'img/report.png')">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/kowadlo.png" alt="Skrypt 3">
                 <h2>Kowadlo</h2>
                 <p>Po kliknieciu w kowadlo przedmiot, ktory gracz trzyma w rece naprawi sie. Gracz musi posiadac dany poziom xp, inaczej wyskoczy blad. <br> <br> <br> </p>
                 <p class="price">Cena: 10 PLN</p>
-                <button onclick="addToCart('Kowadlo', 10, 'img/kowadlo.png')">Zamawiam!</button>
+                <button onclick="addToCart('Kowadlo', 10, 'img/kowadlo.png')">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/ogloszenie.png" alt="Skrypt 4">
                 <h2>Ogloszenie</h2>
                 <p>Skrypt dodaje komendy<br>/ogloszenie text/title<br>Permisja "blatmc.ogloszenie". <br> <br> <br> <br> </p>
-                <p class="price">Cena: 10 PLN</p>
-                <button onclick="addToCart('Ogloszenie', 10, 'img/ogloszenie.png')">Zamawiam!</button>
+                <p class="price">Cena: 5 PLN</p>
+                <button onclick="addToCart('Ogloszenie', 5, 'img/ogloszenie.png')">Dodaj do koszyka</button>
             </div>
             <div class="product">
-                <img src="img/example.png" alt="Skrypt 5">
-                <h2>Example</h2>
-                <p>Przykładowy skrypt do testowania rozmiaru produktu i układu. <br> <br> <br> <br> </p>
+                <img src="img/event.gif" alt="Skrypt 5">
+                <h2>Event</h2>
+                <p>Skrypt dodaje komendy<br>/event oraz /przestawevent<br>Permisja "blatmc.eventtoggle". W momencie gdy gracz ma przedmioty w ekwipunku wyskakuje blad. Gracz musi miec pusty ekwipunek.<br> <br> </p>
                 <p class="price">Cena: 10 PLN</p>
-                <button onclick="addToCart('Example', 10, 'img/example.png')">Zamawiam!</button>
+                <button onclick="addToCart('Event', 10, 'img/event.gif')">Dodaj do koszyka</button>
             </div>
             <div class="product">
-                <img src="img/example.png" alt="Skrypt 6">
-                <h2>Example</h2>
-                <p>Przykładowy skrypt do testowania rozmiaru produktu i układu. <br> <br> <br> <br> </p>
-                <p class="price">Cena: 10 PLN</p>
-                <button onclick="addToCart('Example', 10, 'img/example.png')">Zamawiam!</button>
+                <img src="img/wedka.png" alt="Skrypt 6">
+                <h2>Wedka</h2>
+                <p>Wylacza wedke na danym swiecie<br> <br> <br> <br> <br> <br></p>
+                <p class="price">Cena: 5 PLN</p>
+                <button onclick="addToCart('Wedka', 5, 'img/wedka.png')">Dodaj do koszyka</button>
             </div>
         </div>
     </div>
@@ -315,7 +319,7 @@
         <ul id="cart-items"></ul>
         <p class="total">Razem: <span id="total-price">0</span> PLN</p>
         <div class="checkout" id="checkout-info" style="display: none;">
-        <a href="https://tipply.pl/@szym0neek" target="_blank">Zaplac</a>
+            <a href="https://forms.gle/jd3maYdD979WmW1y9" target="_blank">Zaplac</a>
         </div>
     </div>
 
@@ -363,14 +367,9 @@
             }
         }
 
-        function checkout() {
-            const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('payment-link').href = `https://tipply.pl/@szym0neek`;
-        }
-
         function toggleCart() {
             const cart = document.getElementById('cart');
-            cart.style.display = cart.style.display === 'none' || cart.style.display === '' ? 'block' : 'none';
+            cart.classList.toggle('open');
         }
 
         document.addEventListener('mousemove', function(e) {
