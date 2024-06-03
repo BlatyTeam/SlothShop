@@ -106,6 +106,10 @@
             color: #333;
             margin: 10px 0;
         }
+        .product .discount {
+            font-size: 12px;
+            color: #006600;
+        }
         .product button {
             background-color: #333;
             color: #fff;
@@ -269,42 +273,48 @@
                 <h2>Chat</h2>
                 <p>Skrypt dodaje komendy<br>/chat ON/OFF/CLEAR<br>Permisja "blatmc.chat"<br>Dostep do pisania na chacie to permisja<br>"blatmc.chatpisanie".</p>
                 <p class="price">Cena: 5 PLN</p>
-                <button onclick="addToCart('Chat', 5, 'img/chat.png')">Dodaj do koszyka</button>
+                <p class="discount">Promocja: -15%!</p>
+                <button onclick="addToCart('Chat', 5, 'img/chat.png', 15)">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/report.png" alt="Skrypt 2">
                 <h2>Report</h2>
                 <p>Skrypt dodaje komendy<br>/zglos oraz /helpop<br>Permisja "blatmc.zglos". <br> <br> <br></p>
                 <p class="price">Cena: 5 PLN</p>
-                <button onclick="addToCart('Report', 5, 'img/report.png')">Dodaj do koszyka</button>
+				<p class="discount">Promocja: -15%!</p>
+                <button onclick="addToCart('Report', 5, 'img/report.png', 15)">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/kowadlo.png" alt="Skrypt 3">
                 <h2>Kowadlo</h2>
                 <p>Po kliknieciu w kowadlo przedmiot, ktory gracz trzyma w rece naprawi sie. Gracz musi posiadac dany poziom xp, inaczej wyskoczy blad. <br> <br> <br> </p>
                 <p class="price">Cena: 10 PLN</p>
-                <button onclick="addToCart('Kowadlo', 10, 'img/kowadlo.png')">Dodaj do koszyka</button>
+				<p class="discount">Promocja: -15%!</p>
+                <button onclick="addToCart('Kowadlo', 10, 'img/kowadlo.png', 15)">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/ogloszenie.png" alt="Skrypt 4">
                 <h2>Ogloszenie</h2>
                 <p>Skrypt dodaje komendy<br>/ogloszenie text/title<br>Permisja "blatmc.ogloszenie". <br> <br> <br> <br> </p>
                 <p class="price">Cena: 5 PLN</p>
-                <button onclick="addToCart('Ogloszenie', 5, 'img/ogloszenie.png')">Dodaj do koszyka</button>
+				<p class="discount">Promocja: -15%!</p>
+                <button onclick="addToCart('Ogloszenie', 5, 'img/ogloszenie.png', 15)">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/event.gif" alt="Skrypt 5">
                 <h2>Event</h2>
                 <p>Skrypt dodaje komendy<br>/event oraz /przestawevent<br>Permisja "blatmc.eventtoggle". W momencie gdy gracz ma przedmioty w ekwipunku wyskakuje blad. Gracz musi miec pusty ekwipunek.<br> <br> </p>
                 <p class="price">Cena: 10 PLN</p>
-                <button onclick="addToCart('Event', 10, 'img/event.gif')">Dodaj do koszyka</button>
+				<p class="discount">Promocja: -15%!</p>
+                <button onclick="addToCart('Event', 10, 'img/event.gif', 15)">Dodaj do koszyka</button>
             </div>
             <div class="product">
                 <img src="img/wedka.png" alt="Skrypt 6">
                 <h2>Wedka</h2>
                 <p>Wylacza wedke na danym swiecie<br> <br> <br> <br> <br> <br></p>
                 <p class="price">Cena: 5 PLN</p>
-                <button onclick="addToCart('Wedka', 5, 'img/wedka.png')">Dodaj do koszyka</button>
+				<p class="discount">Promocja: -15%!</p>
+                <button onclick="addToCart('Wedka', 5, 'img/wedka.png', 15)">Dodaj do koszyka</button>
             </div>
         </div>
     </div>
@@ -338,9 +348,10 @@
             localStorage.setItem('cart', JSON.stringify(cart));
         }
 
-        function addToCart(name, price, image) {
+        function addToCart(name, price, image, discount = 0) {
             if (!cart.some(item => item.name === name)) {
-                cart.push({ name, price, image });
+                const discountedPrice = discount > 0 ? price * (1 - discount / 100) : price;
+                cart.push({ name, price: discountedPrice, image });
                 renderCart();
                 saveCart();
             }
@@ -364,7 +375,7 @@
                 img.src = item.image;
                 img.alt = item.name;
                 li.appendChild(img);
-                li.appendChild(document.createTextNode(`${item.name} - ${item.price} PLN`));
+                li.appendChild(document.createTextNode(`${item.name} - ${item.price.toFixed(2)} PLN`));
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Usuń';
                 removeButton.onclick = () => removeFromCart(item.name);
@@ -372,7 +383,7 @@
                 cartItems.appendChild(li);
                 totalPrice += item.price;
             });
-            totalPriceElement.textContent = totalPrice;
+            totalPriceElement.textContent = totalPrice.toFixed(2);
 
             if (cart.length === 0) {
                 checkoutInfo.style.display = 'none';
