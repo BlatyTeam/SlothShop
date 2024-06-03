@@ -326,7 +326,6 @@
     <script>
         let cart = [];
 
-        // Load cart from localStorage
         function loadCart() {
             const savedCart = localStorage.getItem('cart');
             if (savedCart) {
@@ -335,7 +334,6 @@
             }
         }
 
-        // Save cart to localStorage
         function saveCart() {
             localStorage.setItem('cart', JSON.stringify(cart));
         }
@@ -376,7 +374,6 @@
             });
             totalPriceElement.textContent = totalPrice;
 
-            // Show or hide checkout info based on cart items
             if (cart.length === 0) {
                 checkoutInfo.style.display = 'none';
             } else {
@@ -396,7 +393,6 @@
             bgImage.style.transform = `translate(-${x}px, -${y}px)`;
         });
 
-        // Load cart when the page loads
         window.onload = loadCart;
     </script>
 
