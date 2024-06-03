@@ -325,16 +325,33 @@
 
     <script>
         let cart = [];
+
+        // Load cart from localStorage
+        function loadCart() {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                renderCart();
+            }
+        }
+
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
         function addToCart(name, price, image) {
             if (!cart.some(item => item.name === name)) {
                 cart.push({ name, price, image });
                 renderCart();
+                saveCart();
             }
         }
 
         function removeFromCart(name) {
             cart = cart.filter(item => item.name !== name);
             renderCart();
+            saveCart();
         }
 
         function renderCart() {
@@ -378,6 +395,9 @@
             const y = (e.clientY / window.innerHeight) * 50;
             bgImage.style.transform = `translate(-${x}px, -${y}px)`;
         });
+
+        // Load cart when the page loads
+        window.onload = loadCart;
     </script>
 
 </body>
